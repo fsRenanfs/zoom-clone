@@ -10,6 +10,8 @@ class Business {
         this.socket = {}     
         this.currentStream = {}
         this.currentPeer = {}
+
+        this.peers = new Map()
     }
 
    static initialize(deps) {
@@ -24,9 +26,11 @@ class Business {
             .setOnUserDisconnected(this.onUserDisconnected())
             .build()
  
-        this.currentPeer = this.peerBuilder
+        this.currentPeer = await this.peerBuilder
             .setOnError(this.onPeerError())
             .setOnConnectionOpened(this.onPeerConnectionOpened())
+            .setOnCallReceived(this.onPeerCallReceived())
+            .setOnPeerStreamReceived(this.onPeerStreamReceived())
             .build()
 
         console.log('Media stream: ', this.currentStream)
@@ -46,6 +50,7 @@ class Business {
         console.log('Chamou onUserConnected')
         return userId => {
             console.log('user connected!', userId)
+            this.currentPeer.call(userId, this.currentStream)
         }
     }
 
@@ -67,6 +72,23 @@ class Business {
             const id = peer.id
             console.log('peer: ', peer)
             this.socket.emit('join-room', this.room, id)   
+        }
+    }
+
+    onPeerCallReceived = function () {
+        return call => {
+           console.log('answering call', call)
+           call.answer(this.currentStream)
+        }
+    }
+
+    onPeerStreamReceived = function () {
+        return (call, stream) => {
+           const callerId = call.peer
+           this.addVideoStream(callerId, stream)
+           
+           this.peers.set(callerId, { call })
+           this.view.setParticipants(this.peers.size)
         }
     }
 }
