@@ -1,6 +1,6 @@
 class PeerBuilder {
-    constructor({ peerrConfig }) {
-        this.peerrConfig = peerrConfig
+    constructor({ peerConfig }) {
+        this.peerConfig = peerConfig
 
         const defaultFunctionValue = () => { }
 
@@ -41,7 +41,7 @@ class PeerBuilder {
     }
 
     build() {
-        const peer = new Peer(...this.peerrConfig)
+        const peer = new Peer(...this.peerConfig)
 
         peer.on('error', this.onError)
         peer.on('call', this._prepareCallEvent.bind(this))

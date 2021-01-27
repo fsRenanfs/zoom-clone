@@ -18,7 +18,7 @@ const onload = () => {
   const socketUrl = 'http://localhost:3000'
   const socketBuilder = new SocketBuilder({ socketUrl })
 
-  const peerrConfig = Object.values({
+  const peerConfig = Object.values({
     id: undefined,
     config: {
       port: 9000,
@@ -26,7 +26,7 @@ const onload = () => {
       path: '/'
     }
   })
-  const peerBuilder = new PeerBuilder({ peerrConfig })
+  const peerBuilder = new PeerBuilder({ peerConfig })
 
   const view = new View()
   const media = new Media()
