@@ -1,5 +1,6 @@
 class Business {
-    constructor({ room, media, view, socketBuilder, peerBuilder }){
+    constructor({ userName, room, media, view, socketBuilder, peerBuilder }){
+        this.userName = userName,
         this.room = room
         this.media = media
         this.view = view
@@ -113,7 +114,7 @@ class Business {
 
            this.addVideoStream(callerId, stream)
            this.peers.set(callerId, { call })
-           
+
            this.view.setParticipants(this.peers.size)
         }
     }
